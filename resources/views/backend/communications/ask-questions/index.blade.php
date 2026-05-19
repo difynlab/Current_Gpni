@@ -46,7 +46,7 @@
                             <th scope="col">User</th>
                             <th scope="col">Email</th>
                             <th scope="col">Subject</th>
-                            <th scope="col">Initial Message</th>
+                            <th scope="col" style="width: 300px; min-width: 300px; max-width: 300px;">Initial Message</th>
                             <th scope="col">Date</th>
                             <th scope="col">Time</th>
                             <th scope="col">Action</th>
@@ -73,7 +73,7 @@
                                     <td>{{ $ask_question->user }}</td>
                                     <td>{{ $ask_question->email }}</td>
                                     <td>{{ $ask_question->subject }}</td>
-                                    <td>{{ $ask_question->initial_message }}</td>
+                                    <td style="width: 300px; min-width: 300px; max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $ask_question->initial_message }}</td>
                                     <td>{{ $ask_question->date }}</td>
                                     <td>{{ $ask_question->time }}</td>
                                     <td>{!! $ask_question->action !!}</td>

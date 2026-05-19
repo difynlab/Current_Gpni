@@ -225,8 +225,7 @@ class CourseController extends Controller
             'cancel_url' => route('frontend.courses.show', $course->id) . '?' . http_build_query([
                     'error' => 'Final exam purchase has been failed because of the payment cancellation'
                 ]),
-        ]);
-
+        ])
         return redirect()->away($session->url);
     }
 

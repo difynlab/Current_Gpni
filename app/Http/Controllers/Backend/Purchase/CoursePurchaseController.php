@@ -259,9 +259,7 @@ class CoursePurchaseController extends Controller
         $data = $request->except('old_certificate_dates', 'old_certificate_times', 'old_certificate_files', 'certificate_dates', 'certificate_times', 'certificate_files');
         $data['certificates'] = $final_certificates;
 
-        if($final_certificates == null) {
-            $data['status'] = '0';
-        }
+        $data['status'] = $final_certificates ? '1' : '0';
 
         $course_certificate->fill($data)->save();
         

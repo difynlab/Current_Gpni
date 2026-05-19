@@ -7,7 +7,6 @@ use App\Models\CECPointActivity;
 use App\Models\Course;
 use Illuminate\Support\Facades\Auth;
 use App\Models\CourseCertificate;
-use App\Models\CourseFinalExam;
 use App\Models\CoursePurchase;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -53,19 +52,16 @@ class QualificationController extends Controller
             ->get();
 
         $purchase_ids = $purchases->pluck('id')->toArray();
-        $certificates = CourseCertificate::whereIn('course_purchase_id', $purchase_ids)->where('status', '1')->get();
+        $certificates = CourseCertificate::whereIn('course_purchase_id', $purchase_ids)->where('status', '1')->whereNotNull('certificates')->get();
 
         $obtained_certificates = $certificates->map(function ($certificate) use ($purchases) {
             $purchase = $purchases->find($certificate->course_purchase_id);
+            $course = Course::find($purchase->course_id);
 
-            if(CourseFinalExam::where('course_id', $purchase->course_id)->where('result', 'Pass')->where('status', '1')->exists()) {
-                $course = Course::find($purchase->course_id);
-
-                return [
-                    'course_title' => $course->title,
-                    'certificates' => json_decode($certificate->certificates)
-                ];
-            }
+            return [
+                'course_title' => $course->title,
+                'certificates' => json_decode($certificate->certificates)
+            ];
         })->filter();
 
         $cec_point_activities = CECPointActivity::where('user_id', $student->id)->where('status', '!=', '0')->orderBy('id', 'desc')->get();

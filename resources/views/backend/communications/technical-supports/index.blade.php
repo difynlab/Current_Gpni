@@ -37,7 +37,7 @@
                             <th scope="col">User</th>
                             <th scope="col">Email</th>
                             <th scope="col">Subject</th>
-                            <th scope="col">Message</th>
+                            <th scope="col" style="width: 300px; min-width: 300px; max-width: 300px;">Message</th>
                             <th scope="col">Date</th>
                             <th scope="col">Time</th>
                             <th scope="col">Action</th>
@@ -52,7 +52,7 @@
                                     <td>{{ $technical_support->user }}</td>
                                     <td>{{ $technical_support->email }}</td>
                                     <td>{{ $technical_support->subject }}</td>
-                                    <td>{{ $technical_support->message }}</td>
+                                    <td style="width: 300px; min-width: 300px; max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $technical_support->message }}</td>
                                     <td>{{ $technical_support->date }}</td>
                                     <td>{{ $technical_support->time }}</td>
                                     <td>{!! $technical_support->action !!}</td>

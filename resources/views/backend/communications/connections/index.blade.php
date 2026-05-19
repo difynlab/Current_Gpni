@@ -20,8 +20,8 @@
                             <th scope="col">Last Name</th>
                             <th scope="col">Email</th>
                             <th scope="col">Phone</th>
-                            <th scope="col">Question</th>
-                            <th scope="col">Comments</th>
+                            <th scope="col" style="width: 300px; min-width: 300px; max-width: 300px;">Question</th>
+                            <th scope="col" style="width: 300px; min-width: 300px; max-width: 300px;">Comments</th>
                             <th scope="col">Date</th>
                             <th scope="col">Time</th>
                             <th scope="col">Action</th>
@@ -37,8 +37,8 @@
                                     <td>{{ $connection->last_name }}</td>
                                     <td>{{ $connection->email }}</td>
                                     <td>{{ $connection->phone }}</td>
-                                    <td>{{ $connection->question }}</td>
-                                    <td>{{ $connection->comments }}</td>
+                                    <td style="width: 300px; min-width: 300px; max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $connection->question }}</td>
+                                    <td style="width: 300px; min-width: 300px; max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $connection->comments }}</td>
                                     <td>{{ $connection->date }}</td>
                                     <td>{{ $connection->time }}</td>
                                     <td>{!! $connection->action !!}</td>
