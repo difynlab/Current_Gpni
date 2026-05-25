@@ -46,7 +46,7 @@ class AskQuestionController extends Controller
         send_email(new AskQuestionMail($mail_data, 'user'), $auth->email);
         send_email(new AskQuestionMail($mail_data, 'admin'), config('app.admin_emails'));
 
-        return redirect()->back()->with('success', 'Your question has been submitted successfully');
+        return redirect()->back()->with('success', 'Your question has been submitted successfully. Depending on the difficulty of the question, we usually reply within 5 working days. Thank you for your patience.');
     }
 
     public function histories()

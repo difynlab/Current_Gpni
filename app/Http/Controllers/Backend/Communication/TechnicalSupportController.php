@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Backend\Communication;
 
 use App\Http\Controllers\Controller;
 use App\Models\TechnicalSupport;
+use App\Models\TechnicalSupportReply;
 use App\Models\User;
+use App\Mail\TechnicalSupportReplyMail;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -14,6 +16,7 @@ class TechnicalSupportController extends Controller
     {
         foreach($technical_supports as $technical_support) {
             $technical_support->action = '
+            <a href="'. route('backend.communications.technical-supports.edit', $technical_support->id) .'" class="edit-button" title="Reply"><i class="bi bi-pencil-square"></i></a>
             <a id="'.$technical_support->id.'" class="delete-button" title="Delete"><i class="bi bi-trash3"></i></a>';
 
             $user = User::find($technical_support->user_id);
@@ -43,8 +46,72 @@ class TechnicalSupportController extends Controller
         ]);
     }
 
+    public function edit(TechnicalSupport $technical_support)
+    {
+        if($technical_support->is_new != '0') {
+            $technical_support->is_new = '0';
+            $technical_support->save();
+        }
+
+        $user = User::find($technical_support->user_id);
+        $technical_support_replies = TechnicalSupportReply::where('technical_support_id', $technical_support->id)->where('status', '1')->get();
+
+        $technical_support->time_difference = Carbon::parse($technical_support->created_at)->diffForHumans();
+
+        foreach($technical_support_replies as $technical_support_reply) {
+            $technical_support_reply->admin_viewed = '1';
+            $technical_support_reply->save();
+
+            $date_time_string = $technical_support_reply->date . ' ' . $technical_support_reply->time;
+            $technical_support_reply->time_difference = Carbon::parse($date_time_string)->diffForHumans();
+        }
+
+        return view('backend.communications.technical-supports.edit', [
+            'technical_support' => $technical_support,
+            'technical_support_replies' => $technical_support_replies,
+            'user' => $user
+        ]);
+    }
+
+    public function update(Request $request, TechnicalSupport $technical_support)
+    {
+        $technical_support_reply = new TechnicalSupportReply();
+        $technical_support_reply->technical_support_id = $technical_support->id;
+        $technical_support_reply->replied_by = auth()->user()->id;
+        $technical_support_reply->message = $request->message;
+        $technical_support_reply->date = Carbon::now()->toDateString();
+        $technical_support_reply->time = Carbon::now()->toTimeString();
+        $technical_support_reply->admin_viewed = '1';
+        $technical_support_reply->user_viewed = '0';
+        $technical_support_reply->status = '1';
+        $technical_support_reply->save();
+
+        $user = User::find($technical_support->user_id);
+
+        $mail_data = [
+            'user_name' => $user->first_name . ' ' . $user->last_name,
+            'user_email' => $user->email,
+            'subject' => $technical_support->subject,
+            'initial_message' => $technical_support->message,
+            'reply_message' => $request->message,
+        ];
+
+        send_email(new TechnicalSupportReplyMail($mail_data, 'user'), $user->email);
+
+        return redirect()->route('backend.communications.technical-supports.edit', $technical_support)->with('success', "Successfully sent!");
+    }
+
     public function destroy(TechnicalSupport $technical_support)
     {
+        $technical_support_replies = TechnicalSupportReply::where('technical_support_id', $technical_support->id)->where('status', '!=', '0')->get();
+
+        if($technical_support_replies) {
+            foreach($technical_support_replies as $technical_support_reply) {
+                $technical_support_reply->status = '0';
+                $technical_support_reply->save();
+            }
+        }
+
         $technical_support->status = '0';
         $technical_support->save();
 

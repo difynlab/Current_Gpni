@@ -80,6 +80,6 @@ class ContactUsController extends Controller
         send_email(new ContactMail($mail_data, 'user'), $request->email);
         send_email(new ContactMail($mail_data, 'admin'), config('app.admin_emails'));
 
-        return redirect()->back()->with('success', 'Message sent successfully');
+        return redirect()->back()->with('success', 'Message sent successfully. We usually reply within 5 working days. Thank you for your patience.');
     }
 }
