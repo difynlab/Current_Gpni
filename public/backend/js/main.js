@@ -33,6 +33,89 @@ document.querySelectorAll(".editor").forEach((element) => {
         },
         mediaEmbed: {
             previewsInData: true,
+            providers: [
+                {
+                    name: 'youtube',
+                    url: [
+                        /^(?:m\.)?youtube\.com\/watch\?v=([\w-]+)/,
+                        /^(?:m\.)?youtube\.com\/v\/([\w-]+)/,
+                        /^youtube\.com\/embed\/([\w-]+)/,
+                        /^youtu\.be\/([\w-]+)/,
+                        /^youtube\.com\/shorts\/([\w-]+)/,
+                    ],
+                    html: match => {
+                        const id = match[1];
+                        return '<div style="position:relative;padding-bottom:56.2493%;height:0;">' +
+                            `<iframe src="https://www.youtube.com/embed/${id}" ` +
+                            'style="position:absolute;width:100%;height:100%;top:0;left:0;" ' +
+                            'frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>' +
+                            '</iframe></div>';
+                    }
+                },
+                {
+                    name: 'vimeo',
+                    url: [
+                        /^vimeo\.com\/([\d]+)/,
+                        /^vimeo\.com\/[^/]+\/([\d]+)/,
+                    ],
+                    html: match => {
+                        const id = match[1];
+                        return '<div style="position:relative;padding-bottom:56.2493%;height:0;">' +
+                            `<iframe src="https://player.vimeo.com/video/${id}" ` +
+                            'style="position:absolute;width:100%;height:100%;top:0;left:0;" ' +
+                            'frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen>' +
+                            '</iframe></div>';
+                    }
+                },
+                {
+                    name: 'dailymotion',
+                    url: /^dailymotion\.com\/video\/([\w]+)/,
+                    html: match => {
+                        const id = match[1];
+                        return '<div style="position:relative;padding-bottom:56.2493%;height:0;">' +
+                            `<iframe src="https://www.dailymotion.com/embed/video/${id}" ` +
+                            'style="position:absolute;width:100%;height:100%;top:0;left:0;" ' +
+                            'frameborder="0" allowfullscreen>' +
+                            '</iframe></div>';
+                    }
+                },
+                {
+                    name: 'tiktok',
+                    url: /^(?:www\.)?tiktok\.com\/@[\w.-]+\/video\/([\d]+)/,
+                    html: match => {
+                        const id = match[1];
+                        return '<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">' +
+                            `<iframe src="https://www.tiktok.com/embed/v2/${id}" ` +
+                            'style="position:absolute;top:0;left:0;width:100%;height:100%;" ' +
+                            'frameborder="0" allowfullscreen allow="encrypted-media">' +
+                            '</iframe></div>';
+                    }
+                },
+                {
+                    name: 'facebook',
+                    url: /^(?:www\.)?facebook\.com\/.+/,
+                    html: match => {
+                        const url = encodeURIComponent('https://' + match[0]);
+                        return '<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">' +
+                            `<iframe src="https://www.facebook.com/plugins/video.php?href=${url}&show_text=false" ` +
+                            'style="position:absolute;top:0;left:0;width:100%;height:100%;" ' +
+                            'frameborder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; picture-in-picture">' +
+                            '</iframe></div>';
+                    }
+                },
+                {
+                    name: 'allow-all',
+                    url: /^.+$/,
+                    html: match => {
+                        const url = match[0];
+                        return '<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">' +
+                            `<iframe src="${url}" ` +
+                            'style="position:absolute;top:0;left:0;width:100%;height:100%;" ' +
+                            'frameborder="0" allowfullscreen>' +
+                            '</iframe></div>';
+                    }
+                },
+            ],
         },
     })
         .then((newEditor) => {})

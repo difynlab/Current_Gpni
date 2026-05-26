@@ -347,6 +347,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
             Route::prefix('technical-supports')->name('technical-supports.')->group(function() {
                 Route::get('/', [TechnicalSupportController::class, 'index'])->name('index');
                 Route::get('filter', [TechnicalSupportController::class, 'filter'])->name('filter');
+                Route::get('{technical_support}/edit', [TechnicalSupportController::class, 'edit'])->name('edit');
+                Route::put('{technical_support}', [TechnicalSupportController::class, 'update'])->name('update');
                 Route::delete('{technical_support}', [TechnicalSupportController::class, 'destroy'])->name('destroy');
             });
 

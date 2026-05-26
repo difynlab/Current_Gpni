@@ -207,6 +207,9 @@ Route::middleware(['set_language'])->group(function () {
             Route::prefix('technical-supports')->name('technical-supports.')->group(function() {
                 Route::get('/', [TechnicalSupportController::class, 'index'])->name('index');
                 Route::post('/', [TechnicalSupportController::class, 'store'])->name('store');
+                Route::get('histories', [TechnicalSupportController::class, 'histories'])->name('histories');
+                Route::get('histories/{technical_support}', [TechnicalSupportController::class, 'show'])->name('show');
+                Route::post('histories/update/{technical_support}', [TechnicalSupportController::class, 'update'])->name('update');
             });
 
             Route::prefix('wallet')->name('wallet.')->group(function() {
